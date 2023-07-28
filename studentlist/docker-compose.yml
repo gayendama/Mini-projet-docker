@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+    studentlist:
+        container_name: api
+        networks:
+           - studentlist
+        ports:
+            - '5000:5000'
+        volumes:
+            - '$PWD/simple_api/student_age.json:/data/student_age.json'
+        image: 'studentlist:v1'
+
+    php:
+        depends_on:
+           - studentlist
+        networks:
+           - studentlist
+        container_name: ihm-api
+        ports:
+            - '8000:80'
+        environment:
+            - USERNAME=toto
+            - PASSWORD=python
+        volumes:
+            - './website:/var/www/html'
+        image: 'php:apache'
+networks:
+    studentlist:
